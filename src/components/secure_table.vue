@@ -15,12 +15,6 @@
       <!--Aqui comienza el dialogo-->
 
       <v-dialog v-model="dialog" max-width="400px">
-        <template v-slot:activator="{ on }">
-          <v-btn icon v-on="on" @click="show=!show">
-            <v-icon>mdi-plus</v-icon>
-          </v-btn>
-        </template>
-
         <edit-dialog
             :close="close"
             :edited-rule="editedRule"
@@ -49,16 +43,17 @@
         </template>
 
         <template v-slot:item.groups="{ item }">
-          <v-chip small color="primary" v-if='!item.groups'>not available</v-chip>
-          <span v-else badge>{{item.groups}}</span>
+          <v-chip small color="primary" v-if='!item.groups.length'>not available</v-chip>
+          <span v-else v-for="(group, index) of item.groups" :key="index">{{`${index? `, `:``}${group}`}}</span>
         </template>
         <template v-slot:item.is_active="{ item }">
           <v-switch
               label="Active"
               :value="item.is_active"
               dense
-              :color="item.is_active? 'success':''"
+              :color="item.is_active ? 'success':''"
               v-model="item.is_active"
+              @click="show = !show"
           ></v-switch>
         </template>
 
@@ -214,9 +209,6 @@
 
 <style>
   * {
-    -webkit-user-select: none;
-    -moz-user-select: none;
-    -ms-user-select: none;
     user-select: none
   }
 </style>

@@ -1,6 +1,6 @@
 <template>
-  <div style="padding: .25em;width: 75px;text-align: center;border-radius: 3px"
-       :style="{color:'white' ,background:`${color}`}">{{method}}
+  <div style="padding: .25em;width: 75px;text-align: center;border-radius: 3px ; color:white"
+       :class="[color]">{{method}}
   </div>
 </template>
 <script>
@@ -13,11 +13,11 @@
       color() {
         switch (this.method) {
           case 'GET':
-            return 'green';
+            return 'success';
           case 'DELETE':
-            return 'red';
+            return 'error';
           case 'PUT':
-            return 'orange';
+            return 'warning';
           case 'POST':
             return 'blue';
         }
