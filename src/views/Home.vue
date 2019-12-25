@@ -56,9 +56,9 @@ export default {
       this.rules[ruleIndex][rule_key] = !ruleValue;      
     },
 
-    editRule(editedRule){ 
+    editRule(editedRule){
       const editedIndex = this.rules.findIndex(rule => rule.id == editedRule.id);      
-      Object.assign(this.rules[editedIndex], editedRule) 
+      Object.assign(this.rules[editedIndex], editedRule)
     },
 
     addRule(newRule){
@@ -80,12 +80,10 @@ export default {
     //para computar los roles existentes en las tablas y adicionarlos al select del adicionar
     groups_list(){
       let groups = [];
-      this.rules.forEach( function(el){
-        el.groups.forEach( group => {
-          if(groups.indexOf(group) == -1 && group){                       
-            groups.push(group);
-          } 
-        })        
+      this.rules.forEach( function(el){        
+          if(groups.indexOf(el) == -1 && el){                       
+            groups.push(el);
+          }              
       });      
       return groups.sort()
     }
