@@ -27,6 +27,7 @@
                 :label="group"                
                 :value="group"
                 v-model="available_groups"
+                :color="methodColor(toEditMethod.method)"
                 :disabled="toEditMethod.groups[index] && toEditMethod.groups[index].locked || false "
                 multiple
                 ></v-checkbox>
@@ -42,13 +43,16 @@
               </v-col> -->
 
               <v-col cols class="py-0 d-flex flex-row align-center">
-                <!-- <v-icon
-                small           
-                :class="['mdi',toEditMethod.locked? 'mdi-lock':'mdi-lock-open-variant']"
-                :color="editedMethod.locked? '':'success'"
+                <v-icon
+                small
+                :class="['mdi', toEditMethod.groups[index] && toEditMethod.groups[index].locked ? 'mdi-lock':'mdi-lock-open-variant']"
+                :color="toEditMethod.groups[index] && toEditMethod.groups[index].locked ? 'grey lighten-1' : 'success' "                
                 ></v-icon>
-                <span class="subtitle-1 ml-1">{{editedMethod.locked? 'Locked':'Unlocked'}}</span> -->
-                {{`${toEditMethod.groups[index] ? toEditMethod.groups[index].locked : ''}`}}
+                <span 
+                  :class="['subtitle-1' , 'ml-1' , toEditMethod.groups[index] && toEditMethod.groups[index].locked && 'text--disabled' ]"                  
+                  >
+                    {{toEditMethod.groups[index] && toEditMethod.groups[index].locked ? 'Locked':'Unlocked'}}
+                </span>                
               </v-col> 
               
             </v-row>
