@@ -10,11 +10,10 @@
             :key="index"            
             :table_name="table"
             :table_rules="table_rules(table)"
-            :global_last_id="global_last_id"
             :groups_list="groups_list"
             @toggle-rule-key="toggleRuleLock"
             @edit-rule="editRule"
-            @add-rule="addRule" 
+            @add-rule="addRule"
             ></secure_table>
 
       </v-col>
@@ -62,7 +61,7 @@ export default {
     },
 
     addRule(newRule){
-      this.rules.push(newRule)  
+      this.rules.push(newRule)
     }
 
   },
@@ -73,18 +72,14 @@ export default {
       return this.tables.filter(table => this.table_rules(table).length)
     },
 
-    global_last_id(){
-      return Number(this.rules[this.rules.length-1].id)
-    },
-
     //para computar los roles existentes en las tablas y adicionarlos al select del adicionar
     groups_list(){
       let groups = [];
       this.rules.forEach( function(el){        
-          if(groups.indexOf(el) == -1 && el){                       
-            groups.push(el);
+          if(groups.indexOf(el.groups) == -1 && el.groups){
+            groups.push(el.groups);
           }              
-      });      
+      });
       return groups.sort()
     }
   },
