@@ -80,6 +80,7 @@
               hight-detail
               dense
               small
+              readonly
               :color="item.is_active ? 'primary' : ''"
               v-model="item.is_active"
             ></v-switch>

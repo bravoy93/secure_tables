@@ -33,20 +33,21 @@
                 ></v-checkbox>
               </v-col>
               
-              <!-- <v-col cols class="py-0">
-              <v-switch
-              :label="group.is_active ? 'Active' : 'Not active'"
-              :v-model="editedMethod.groups[index].is_active"
-              :value="group.is_active"
-              :multiple="true" 
-              ></v-switch>      
-              </v-col> -->
+              <v-col cols class="py-0">
+                <v-switch
+                  :label=" active_groups.includes(group) && 'Active' || 'Not active'"
+                  v-model="active_groups"
+                  :value="group"  
+                  :color="methodColor(toEditMethod.method)"
+                  :disabled="toEditMethod.groups[index] && toEditMethod.groups[index].locked || !available_groups.includes(group) || false "
+                ></v-switch>      
+              </v-col>
 
               <v-col cols class="py-0 d-flex flex-row align-center">
                 <v-icon
                 small
                 :class="['mdi', toEditMethod.groups[index] && toEditMethod.groups[index].locked ? 'mdi-lock':'mdi-lock-open-variant']"
-                :color="toEditMethod.groups[index] && toEditMethod.groups[index].locked ? 'grey lighten-1' : 'success' "                
+                :color="toEditMethod.groups[index] && toEditMethod.groups[index].locked ? 'grey lighten-1' : methodColor(toEditMethod.method) "                
                 ></v-icon>
                 <span 
                   :class="['subtitle-1' , 'ml-1' , toEditMethod.groups[index] && toEditMethod.groups[index].locked && 'text--disabled' ]"                  
@@ -56,7 +57,7 @@
               </v-col> 
               
             </v-row>
-            {{available_groups}}
+            Avaibles groups:{{available_groups}} Active groups: {{active_groups}}
           </v-col>
           
         </v-row>
@@ -105,9 +106,7 @@
         }
       },      
 
-      close(){
-        //this.toEditMethod.     
-        console.log(this.available_groups);
+      close(){        
         this.$emit('close')
       }
     },
@@ -142,7 +141,9 @@
     watch: { 
       toEditMethod() {//si cambia el valor del metodo editado se cambian los grupos disponibles a los del nuevo metodo
        this.available_groups = [];
-       this.toEditMethod.groups.forEach(group => this.available_groups.push(group.group));       
+       this.active_groups = [];
+       this.toEditMethod.groups.forEach(group => this.available_groups.push(group.group));    
+       this.toEditMethod.groups.forEach(group => group.is_active && this.active_groups.push(group.group));      
       },
 
       dialog(val) {
