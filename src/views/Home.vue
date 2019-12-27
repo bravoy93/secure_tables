@@ -10,10 +10,10 @@
             :key="index"            
             :table_name="table"
             :table_rules="table_rules(table)"
-            :groups_list="groups_list"
-            @toggle-rule-key="toggleRuleLock"
+            :groups_list="groups_list"           
             @edit-rule="editRule"
             @add-rule="addRule"
+            @delete-rule="deleteRule"       
             ></secure_table>
 
       </v-col>
@@ -46,22 +46,22 @@ export default {
 
     table_rules(table_name) {
       return this.rules.filter(table => table.table_name == table_name)
-    },   
-
-    //para togglear los estados lock y active
-    toggleRuleLock(rule, rule_key) {           
-      const ruleIndex = this.rules.indexOf(rule);
-      const ruleValue = this.rules[ruleIndex][rule_key];
-      this.rules[ruleIndex][rule_key] = !ruleValue;      
-    },
+    },    
 
     editRule(editedRule){
       const editedIndex = this.rules.findIndex(rule => rule.id == editedRule.id);      
-      Object.assign(this.rules[editedIndex], editedRule)
+      //Object.assign(this.rules[editedIndex], editedRule)
+      this.rules.splice(editedIndex,1,editedRule);
+      console.log(`Regla ${editedRule} actualizada correctamente`);
     },
 
     addRule(newRule){
       this.rules.push(newRule)
+    },
+
+    deleteRule(ruleId){
+      const toDeleteIndex = this.rules.findIndex(rule => rule.id == ruleId);
+      this.rules.splice(toDeleteIndex,1)
     }
 
   },
@@ -80,7 +80,7 @@ export default {
             groups.push(el.groups);
           }              
       });
-      return groups.sort()
+      return groups
     }
   },
 

@@ -4,8 +4,9 @@
       dark
       class="primary"
       no-gutter
-      elevation="2"
-      @click="show = !show"
+      elevation="1"
+      @click="show = !show"    
+      style="cursor:pointer"  
     >
       <v-toolbar-title>
         <h3>{{ table_name }}</h3>
@@ -22,12 +23,13 @@
 
       <v-dialog v-model="dialog" max-width="600px">
         <edit-dialog
-          @close="close"
+          @edit-rule="editRule"
+          @add-rule="addRule"
+          @delete-rule="deleteRule"
+          @close="close"          
           :toEditMethod="editedMethod"
-          :groups_list="groups_list"
-          :table_method_rules="table_method_rules"
-          :dialog = "dialog"
-          :save="save"
+          :groups_list="groups_list"          
+          :dialog = "dialog"          
         />
       </v-dialog>
 
@@ -40,6 +42,7 @@
         dense
         :headers="table_headers"
         :items="table_method_rules"
+        :disable-pagination="true"
         @click:row="editMethod"
       >
         <template v-slot:item.method="{ item }">
@@ -51,6 +54,7 @@
             v-if="!item.groups.length"
             small
             title="There are not groups assigned to this method yet"
+            class="ma-1"
             >not available</v-chip
           >
           <v-chip
@@ -73,7 +77,7 @@
         </template>
 
         <template v-slot:item.is_active="{ item }">
-          <div @click.stop>
+          <div @click.stop="editMethod">
             <v-switch
               v-show="!item.activeGroups || item.activeGroups == 100"
               :value="item.activeGroups"
@@ -81,8 +85,9 @@
               dense
               small
               readonly
-              :color="item.is_active ? 'primary' : ''"
-              v-model="item.is_active"
+              :color="item.activeGroups ? 'primary' : ''"
+              v-model="item.activeGroups"
+              :title="`All groups are ${ item.activeGroups ? 'active' : 'deactive'}`"
             ></v-switch>
             <v-progress-circular
               v-show="item.activeGroups && item.activeGroups != 100"
@@ -91,8 +96,9 @@
               class="my-2"
               size="32"
               width="1"
+              :title="`There are ${Math.round(item.groups.length * item.activeGroups / 100)} of ${item.groups.length} groups active`"
             >
-              <span class="caption">{{ item.activeGroups }}%</span>
+              <span class="caption">{{`${ Math.round(item.groups.length * item.activeGroups / 100)}/${item.groups.length}`}}</span>
             </v-progress-circular>
           </div>
         </template>
@@ -111,8 +117,9 @@
             color="primary"
             class="my-2"
             width="1"
+            :title="`There are ${Math.round(item.groups.length * item.lockedGroups / 100)} of ${item.groups.length} groups locked`"
           >
-            <span class="caption">{{ item.lockedGroups }}%</span>
+            <span class="caption">{{`${ Math.round(item.groups.length * item.lockedGroups / 100)}/${item.groups.length}`}}</span>
           </v-progress-circular>
         </template>
 
@@ -143,30 +150,12 @@ export default {
         { text: "Method", value: "method" },
         { text: "Groups", value: "groups" },
         { text: "Active", value: "is_active" },
-        { text: "Lock", value: "locked" }
-        // {text: 'Action ', value: 'action', sortable: false},
+        { text: "Lock", value: "locked" }        
       ],
       methods: ["GET", "POST", "PUT", "DELETE"],
       dialog: false,
-      show: false,
-      //editedIndex: -1,
-      editedMethod: {},
-      editedRule: {
-        id: "",
-        table_name: "",
-        method: "",
-        groups: "",
-        is_active: "",
-        locked: ""
-      },
-      defaultRule: {
-        id: "",
-        table_name: this.table_name,
-        method: "",
-        groups: "",
-        is_active: "",
-        locked: true
-      }
+      show: false,      
+      editedMethod: {},      
     };
   },
 
@@ -177,21 +166,24 @@ export default {
     },
 
     close() {
-      this.dialog = false;
-      // setTimeout(() => {
-      //   this.editedMethod = {};
-      // }, 300);
+      this.dialog = false;      
     },
 
-    save() {
-      this.$emit("edit-rule", this.editedMethod);
+    editRule(rule) {
+      this.$emit("edit-rule", rule);
       this.close();
     },
-    
 
-    toggleRuleKey(rule, key) {
-      this.$emit("toggle-rule-key", rule, key);
+    addRule(rule) {
+      this.$emit("add-rule", rule);
+      this.close();
+    },
+
+    deleteRule(ruleId) {
+      this.$emit("delete-rule", ruleId);
+      this.close();
     }
+
   },
 
   computed: {
@@ -227,23 +219,18 @@ export default {
             (newMethod.groups.filter(grp => grp[property]).length /
               newMethod.groups.length) *
               100
-          ); //devuelve el porcentaje de las opciones marcadas
+          ); //devuelve el porcentaje de las opciones marcadas para el estado mixto
 
         newMethod.activeGroups = percent("is_active");
         newMethod.lockedGroups = percent("locked");
 
         methodRules.push(newMethod);
       });
-      console.log(methodRules);
+      
       return methodRules;
     }
 
-    //
-  },
-  
-
-  created() {
-    this.editedRule = Object.assign({}, this.defaultRule);
+    
   }
 };
 </script>

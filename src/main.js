@@ -20,7 +20,7 @@ Vue.use({
                 return [
                     { 'id': 1, 'table_name': 'table1', 'method': 'GET', 'groups': 'admin', 'is_active': false, 'locked': true },
                     { 'id': 2, 'table_name': 'table1', 'method': 'POST', 'groups': 'admin', 'is_active': true, 'locked': true },
-                    //{ 'id': 3, 'table_name': 'table1', 'method': 'PUT', 'groups': '', 'is_active': true, 'locked': false },
+                    { 'id': 3, 'table_name': 'table3', 'method': 'PUT', 'groups': 'agent', 'is_active': true, 'locked': true },
                     { 'id': 4, 'table_name': 'table1', 'method': 'DELETE', 'groups': 'admin', 'is_active': true, 'locked': false },
                     { 'id': 5, 'table_name': 'table1', 'method': 'GET', 'groups': 'agent', 'is_active': true, 'locked': false },
                     //{ 'id': 6, 'table_name': 'table2', 'method': 'GET', 'groups': '', 'is_active': true, 'locked': false },
