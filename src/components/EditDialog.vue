@@ -6,7 +6,7 @@
         no-gutters
         elevation="1">
       <v-card-title>
-        <span class="headline">Method "{{edited_method.method}}"</span>
+        <span class="headline">{{edited_method.tableName}} method "{{edited_method.method}}"</span>
       </v-card-title>
     </v-app-bar>
 
@@ -18,8 +18,8 @@
           </v-col>
           <v-col cols="12">
             <v-row
-            v-for="(group, index) of groups_list"
-            :key="index"
+            v-for="group of groups_list"
+            :key="group"
             >
               <v-col cols class="py-0">
                 <v-checkbox
@@ -28,7 +28,7 @@
                 :value="group"
                 v-model="available_groups"
                 :color="methodColor(edited_method.method)"
-                :disabled="edited_method.groups[index] && edited_method.groups[index].locked || false "
+                :disabled="edited_method.groups.find( el => el.group == group && el.locked)? true : false "
                 multiple
                 @change="remove_active(group)"
                 ></v-checkbox>
@@ -40,20 +40,20 @@
                   v-model="active_groups"
                   :value="group"  
                   :color="methodColor(edited_method.method)"
-                  :disabled="edited_method.groups[index] && edited_method.groups[index].locked || !available_groups.includes(group) || false "
+                  :disabled="edited_method.groups.find( el => el.group == group && el.locked)? true : !available_groups.includes(group) "
                 ></v-switch>      
               </v-col>
 
               <v-col cols class="py-0 d-flex flex-row align-center">
                 <v-icon
                 small
-                :class="['mdi', edited_method.groups[index] && edited_method.groups[index].locked ? 'mdi-lock':'mdi-lock-open-variant']"
-                :color="edited_method.groups[index] && edited_method.groups[index].locked ? 'grey lighten-1' : methodColor(edited_method.method) "                
+                :class="['mdi', edited_method.groups.find( el => el.group == group && el.locked)? 'mdi-lock':'mdi-lock-open-variant']"
+                :color="edited_method.groups.find( el => el.group == group && el.locked)?  'grey lighten-1' : methodColor(edited_method.method) "                
                 ></v-icon>
                 <span 
-                  :class="['subtitle-1' , 'ml-1' , edited_method.groups[index] && edited_method.groups[index].locked && 'text--disabled' ]"                  
+                  :class="['subtitle-1' , 'ml-1' , edited_method.groups.find( el => el.group == group && el.locked) && 'text--disabled' ]"                  
                   >
-                    {{edited_method.groups[index] && edited_method.groups[index].locked ? 'Locked':'Unlocked'}}
+                    {{edited_method.groups.find( el => el.group == group && el.locked)? 'Locked':'Unlocked'}}
                 </span>                
               </v-col> 
               
@@ -188,7 +188,7 @@
     },
 
     created(){
-      this.role_properties_update()
+      this.role_properties_update()      
       // Object.assign(this.edited_method, this.toEditMethod);
       // for(let group of this.toEditMethod.groups){
       //     this.available_groups.push(group.group);

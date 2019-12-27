@@ -53,8 +53,7 @@
           <v-chip
             v-if="!item.groups.length"
             small
-            title="There are not groups assigned to this method yet"
-            class="ma-1"
+            title="There are not groups assigned to this method yet"            
             >not available</v-chip
           >
           <v-chip
@@ -62,7 +61,7 @@
             v-for="group in item.groups"
             :key="group.id"
             small
-            class="mr-1 primary"
+            class="mr-1  mb-1 primary"
             :title="
               `This group is ${group.is_active ? 'active' : 'not active'}`
             "
@@ -103,7 +102,7 @@
           </div>
         </template>
 
-        <template v-slot:item.locked="{ item }">
+        <!-- <template v-slot:item.locked="{ item }">
           <v-icon
             v-show="!item.lockedGroups || item.lockedGroups == 100"
             small
@@ -121,7 +120,7 @@
           >
             <span class="caption">{{`${ Math.round(item.groups.length * item.lockedGroups / 100)}/${item.groups.length}`}}</span>
           </v-progress-circular>
-        </template>
+        </template> -->
 
         <template v-slot:no-data>
           <v-btn color="primary">Reset</v-btn>
@@ -150,7 +149,7 @@ export default {
         { text: "Method", value: "method" },
         { text: "Groups", value: "groups" },
         { text: "Active", value: "is_active" },
-        { text: "Lock", value: "locked" }        
+        //{ text: "Lock", value: "locked" }        
       ],
       methods: ["GET", "POST", "PUT", "DELETE"],
       dialog: false,
