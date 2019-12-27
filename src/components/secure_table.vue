@@ -76,8 +76,8 @@
         </template>
 
         <template v-slot:item.is_active="{ item }">
-          <div @click.stop="editMethod">
-            <v-switch
+         
+            <!-- <v-switch
               v-show="!item.activeGroups || item.activeGroups == 100"
               :value="item.activeGroups"
               hight-detail
@@ -87,19 +87,19 @@
               :color="item.activeGroups ? 'primary' : ''"
               v-model="item.activeGroups"
               :title="`All groups are ${ item.activeGroups ? 'active' : 'deactive'}`"
-            ></v-switch>
-            <v-progress-circular
-              v-show="item.activeGroups && item.activeGroups != 100"
-              :value="item.activeGroups"
+            ></v-switch> -->
+            <v-progress-circular             
+              :value="item.activeGroups || 0"
               color="primary"
               class="my-2"
               size="32"
               width="1"
               :title="`There are ${Math.round(item.groups.length * item.activeGroups / 100)} of ${item.groups.length} groups active`"
             >
-              <span class="caption">{{`${ Math.round(item.groups.length * item.activeGroups / 100)}/${item.groups.length}`}}</span>
+              <span class="caption" v-show="item.activeGroups">{{`${ Math.round(item.groups.length * item.activeGroups / 100)}/${item.groups.length}`}}</span>
+              <span class="caption text--disabled" v-show="!item.activeGroups"> - </span>
             </v-progress-circular>
-          </div>
+         
         </template>
 
         <!-- <template v-slot:item.locked="{ item }">

@@ -58,7 +58,7 @@
               </v-col> 
               
             </v-row>
-            Avaibles groups:{{available_groups}} Active groups: {{active_groups}} Locked Groups {{locked_groups}}
+            <!-- Avaibles groups:{{available_groups}} Active groups: {{active_groups}} Locked Groups {{locked_groups}} -->
           </v-col>
           
         </v-row>
